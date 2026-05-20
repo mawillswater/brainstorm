@@ -1,0 +1,48 @@
+<!doctype html><!--SHARE-LOCKED--><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>folder mode test</title>
+<style>
+html,body{margin:0;height:100%;}
+#pwgate{position:fixed;inset:0;background:#ece9e3;display:flex;align-items:center;justify-content:center;font-family:-apple-system,'Inter','Noto Sans SC',sans-serif;}
+#pwgate *{box-sizing:border-box;}
+.pgc{background:#fff;border-radius:20px;padding:38px 36px;width:330px;max-width:86vw;text-align:center;box-shadow:0 24px 50px -18px rgba(0,0,0,.3);}
+.pgrb{font-size:40px;}
+.pgt{font-size:18px;font-weight:800;color:#1a1a1a;margin-top:10px;line-height:1.4;}
+.pgs{font-size:13px;color:#888;margin-top:6px;}
+#pgi{width:100%;margin-top:20px;height:46px;border-radius:12px;border:1.5px solid #ddd;background:#fafafa;padding:0 15px;font-size:15px;font-family:inherit;outline:none;}
+#pgi:focus{border-color:#1a1a1a;}
+#pgb{width:100%;margin-top:10px;height:46px;border-radius:12px;border:none;background:#1a1a1a;color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;}
+#pgb:disabled{opacity:.5;}
+#pge{display:none;font-size:12.5px;color:#d83a36;font-weight:600;margin-top:10px;}
+</style></head>
+<body>
+<div id="pwgate"><div class="pgc">
+  <div class="pgrb">🔒</div>
+  <div class="pgt">folder mode test</div>
+  <div class="pgs">此页面已加密，请输入访问密码</div>
+  <input id="pgi" type="password" placeholder="访问密码" autocomplete="off" autofocus>
+  <button id="pgb">进入</button>
+  <div id="pge">密码不对，再试一次</div>
+</div></div>
+<script>
+var ENC={s:"jsPYwKjDqGATBSvutCxE6A==",i:"1HQZs2sAXll1Rezn",c:"xsycezPT080OFEhgWqKOEhNWo3R7T+FSJSeeDmf71q7MiZYzoEOCxl1ca09NUzQq9Ks8A9D9Yl0rNyblBboER8l5fI/2vjikwP94lVx8lZCSBwCWIvRwLjTWkUq/MZFVreVu9+pG91oJd4qAwAmRc7+LBd8ukQI2UJtI32m7iG2ZB9RmP9ECriu8viRU1AaOScV3gcuNIJlEsTJBMCmYwrO6DfAWtELdSopi98sJBVKIHQkyhr8K5dEGZfkd8xhYylitQefsB2Xm84B+LHxnwokr9IeJE/dPFnETf+/zEa+8MC4M0lgS9JO7cOCWPGL34QvwPUeLqFqOwEOnkDA3AffoysKL9616eTympuh4oP9PRIvBXX3Lyb4bZIpqVdrvv53U",n:200000};
+function u(b64){var s=atob(b64),a=new Uint8Array(s.length),i=0;for(;i<s.length;i++)a[i]=s.charCodeAt(i);return a;}
+async function dec(pw){
+  var base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+  var key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:u(ENC.s),iterations:ENC.n,hash:'SHA-256'},
+    base,{name:'AES-GCM',length:256},false,['decrypt']);
+  var pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:u(ENC.i)},key,u(ENC.c));
+  return new TextDecoder().decode(pt);
+}
+function render(html){document.open();document.write(html);document.close();}
+function go(){
+  var inp=document.getElementById('pgi'),btn=document.getElementById('pgb'),err=document.getElementById('pge');
+  var pw=(inp.value||'').trim();if(!pw)return;
+  btn.disabled=true;err.style.display='none';
+  dec(pw).then(function(html){try{sessionStorage.setItem('share_pwk',pw);}catch(e){}render(html);})
+         .catch(function(){btn.disabled=false;err.style.display='block';inp.value='';inp.focus();});
+}
+document.getElementById('pgb').addEventListener('click',go);
+document.getElementById('pgi').addEventListener('keydown',function(e){if(e.key==='Enter')go();});
+(function(){try{var k=sessionStorage.getItem('share_pwk');if(k)dec(k).then(render).catch(function(){});}catch(e){}})();
+</script>
+</body></html>

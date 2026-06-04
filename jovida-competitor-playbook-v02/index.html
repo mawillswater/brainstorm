@@ -257,20 +257,27 @@
     .research-card {
       overflow: hidden;
       display: grid;
-      grid-template-rows: auto 1fr;
+      grid-template-columns: minmax(300px, 0.92fr) minmax(360px, 1.08fr);
+      grid-template-rows: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "body media"
+        "body source";
+      align-items: stretch;
     }
 
     .shot {
+      grid-area: media;
       position: relative;
       min-height: 250px;
-      max-height: 420px;
+      max-height: 460px;
       background: #e9edf2;
       overflow: hidden;
+      border-left: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
 
     .shot.tall {
-      max-height: 560px;
+      max-height: 620px;
     }
 
     .shot img {
@@ -301,7 +308,11 @@
     }
 
     .card-body {
-      padding: 20px;
+      grid-area: body;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .card-top {
@@ -335,10 +346,12 @@
     }
 
     .shot-link {
+      grid-area: source;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 14px;
+      border-left: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
       padding: 12px 16px;
       background: #0f1419;
@@ -402,10 +415,12 @@
     }
 
     .image-pair {
+      grid-area: media;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1px;
       background: var(--line);
+      border-left: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
 
@@ -546,6 +561,21 @@
       .takeaways,
       .source-list {
         grid-template-columns: 1fr;
+      }
+
+      .research-card {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+          "body"
+          "media"
+          "source";
+      }
+
+      .shot,
+      .shot-link,
+      .image-pair {
+        border-left: 0;
       }
     }
 
@@ -791,7 +821,7 @@
           <div class="shot-link"><span>功能链接</span><a href="https://help.structured.app/en/articles/4511874" target="_blank" rel="noopener">Structured · Replan</a></div>
           <div class="card-body">
             <div class="card-top">
-              <h3>Structured · Replan as daily reset</h3>
+              <h3>Structured · Replan</h3>
             </div>
             <p class="summary">Structured 的 Replan 可以作为 Today reset 的直接参考：它没有替用户自动判断优先级，但已经把“未完成任务处理”从普通列表里拆成独立流程。</p>
             <div class="mini-grid">
@@ -809,7 +839,7 @@
           <div class="shot-link"><span>功能链接</span><a href="https://help.amazingmarvin.com/en/articles/3432937-snooze-feature" target="_blank" rel="noopener">Amazing Marvin · Snooze</a></div>
           <div class="card-body">
             <div class="card-top">
-              <h3>Amazing Marvin · Snooze as reset tool</h3>
+              <h3>Amazing Marvin · Snooze</h3>
             </div>
             <p class="summary">Snooze 不是 Today reset，但它提供了关键组成：把任务从当前压力环境里拿掉，到更合理的时间再出现。</p>
             <div class="mini-grid">
@@ -869,7 +899,7 @@
           <div class="shot-link"><span>功能链接</span><a href="https://www.tiimoapp.com/" target="_blank" rel="noopener">Tiimo · AI task planning</a></div>
           <div class="card-body">
             <div class="card-top">
-              <h3>Tiimo · AI task planning</h3>
+              <h3>Tiimo · AI Task Planning</h3>
             </div>
             <p class="summary">Tiimo 更强调把用户输入转成计划，和 Jovida 的 Brain Dump / Magic Subtasks 组合很接近。它的价值在于“我只说一句，系统帮我变成结构”。</p>
             <div class="mini-grid">
@@ -887,7 +917,7 @@
           <div class="shot-link"><span>功能链接</span><a href="https://routineflow.app/" target="_blank" rel="noopener">RoutineFlow</a></div>
           <div class="card-body">
             <div class="card-top">
-              <h3>RoutineFlow · current step</h3>
+              <h3>RoutineFlow · Current Step</h3>
             </div>
             <p class="summary">RoutineFlow 把一个 routine 展示成当前步骤和计时器。它不是 AI 产品，但“只看下一步”的执行体验很适合 tiny step。</p>
             <div class="mini-grid">
@@ -905,7 +935,7 @@
           <div class="shot-link"><span>功能链接</span><a href="https://www.dubbii.app/" target="_blank" rel="noopener">Dubbii · Body Doubling</a></div>
           <div class="card-body">
             <div class="card-top">
-              <h3>Dubbii · body doubling</h3>
+              <h3>Dubbii · Body Doubling</h3>
             </div>
             <p class="summary">Dubbii 用真人陪做和任务拆解降低启动阻力。它提醒 Jovida：tiny step 不只是信息结构，也可以是陪伴感和仪式感。</p>
             <div class="mini-grid">
@@ -923,7 +953,7 @@
           <div class="shot-link"><span>功能链接</span><a href="https://habitica.com/" target="_blank" rel="noopener">Habitica</a></div>
           <div class="card-body">
             <div class="card-top">
-              <h3>Habitica · gamified tasks</h3>
+              <h3>Habitica · Gamified Tasks</h3>
             </div>
             <p class="summary">Habitica 把任务完成包装成 RPG 奖励。Jovida 不需要走重游戏化路线，但可以借鉴“完成一个微动作就有轻反馈”的即时奖励。</p>
             <div class="mini-grid">
